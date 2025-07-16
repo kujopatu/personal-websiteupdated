@@ -18,7 +18,7 @@ export default function App() {
         </div>
 
         <header className="text-center mb-10">
-          <img src="/images/profile.jpg" alt="Profile" className="w-32 h-32 rounded-full mx-auto mb-4 border" />
+          <img src="images/profile.jpg" alt="Profile" className="w-32 h-32 rounded-full mx-auto mb-4 border" />
           <h1 className="text-3xl font-bold">Patu Kujo Emmanuel</h1>
           <p className="text-lg">Computer Engineer | Logistics Professional</p>
           <div className="flex justify-center mt-4 space-x-4 text-xl text-blue-600 dark:text-blue-300">
