@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import emailjs from 'emailjs-com';
 import {
   FaFacebook,
   FaLinkedin,
@@ -9,6 +10,31 @@ import {
 } from "react-icons/fa";
 
 export default function App() {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [sent, setSent] = useState(false);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    emailjs.send(
+      "service_9v51tgf",
+      "template_ol3r2oc",
+      formData,
+      "8E7w2GqG16qa5loyT"
+    ).then(() => {
+      setSent(true);
+      setFormData({ name: "", email: "", message: "" });
+      setTimeout(() => setSent(false), 4000);
+    }).catch((error) => {
+      alert("Failed to send message.");
+      console.error(error);
+    });
+  };
+
   const [darkMode, setDarkMode] = useState(false);
   const [filter, setFilter] = useState("All");
 
@@ -38,7 +64,7 @@ export default function App() {
 
   return (
     <div className={darkMode ? "dark" : ""}>
-      <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 px-6 py-10 transition-all duration-300">
+      <div className="min-h-screen bg-[url('/bg.jpg')] bg-cover bg-center text-gray-800 dark:text-gray-100 px-6 py-10 transition-all duration-300">
         <div className="flex justify-end mb-4">
           <button
             onClick={() => setDarkMode(!darkMode)}
@@ -123,35 +149,45 @@ export default function App() {
         </section>
 
         <section>
-          <h2 className="text-2xl font-semibold mb-2">Contact Me</h2>
-          <form className="grid gap-4 mt-4 max-w-xl">
-            <input
-              type="text"
-              placeholder="Your Name"
-              className="p-2 border border-gray-300 dark:border-gray-700 rounded"
-              required
-            />
-            <input
-              type="email"
-              placeholder="Your Email"
-              className="p-2 border border-gray-300 dark:border-gray-700 rounded"
-              required
-            />
-            <textarea
-              placeholder="Your Message"
-              rows={4}
-              className="p-2 border border-gray-300 dark:border-gray-700 rounded"
-              required
-            />
-            <button
-              type="submit"
-              disabled
-              className="bg-orange-600 text-white py-2 px-4 rounded opacity-50 cursor-not-allowed"
-            >
-              Send (Disabled for now)
-            </button>
-          </form>
-        </section>
+  <h2 className="text-2xl font-semibold mb-2">Contact Me</h2>
+  <form onSubmit={handleSubmit} className="grid gap-4 mt-4 max-w-xl">
+    <input
+      type="text"
+      name="name"
+      value={formData.name}
+      onChange={handleChange}
+      placeholder="Your Name"
+      className="p-2 border border-gray-300 dark:border-gray-700 rounded"
+      required
+    />
+    <input
+      type="email"
+      name="email"
+      value={formData.email}
+      onChange={handleChange}
+      placeholder="Your Email"
+      className="p-2 border border-gray-300 dark:border-gray-700 rounded"
+      required
+    />
+    <textarea
+      name="message"
+      value={formData.message}
+      onChange={handleChange}
+      rows={4}
+      placeholder="Your Message"
+      className="p-2 border border-gray-300 dark:border-gray-700 rounded"
+      required
+    />
+    <button
+      type="submit"
+      className="bg-orange-600 text-white py-2 px-4 rounded hover:bg-orange-700"
+    >
+      Send Message
+    </button>
+    {sent && <p className="text-green-500 mt-2">Message sent successfully!</p>}
+  </form>
+</section>
+
       </div>
     </div>
   );
